@@ -16,19 +16,18 @@ class Game:
     def get_winner(player_choice, bot_choice):
         if player_choice == bot_choice:
             return 'Draw'
-        elif (player_choice == 'scissors' and bot_choice == 'paper')or \
-            (player_choice == 'scissors' and bot_choice == 'lizard')or \
-            (player_choice == 'stone' and bot_choice == 'scissors')or \
-            (player_choice == 'stone' and bot_choice == 'lizard')or \
-            (player_choice == 'paper' and bot_choice == 'stone')or \
-            (player_choice == 'paper' and bot_choice == 'Spok')or \
-            (player_choice == 'lizard' and bot_choice == 'Spok')or \
-            (player_choice == 'lizard' and bot_choice == 'paper')or \
-            (player_choice == 'Spok' and bot_choice == 'scissors')or \
-            (player_choice == 'Spok' and bot_choice == 'stone'):
-            return 'Player'
-        else:
-            return 'Bot'
+
+
+        rules = {
+            'stone': ['scissors', 'lizard'],
+            'paper': ['stone', 'Spok'],
+            'scissors': ['paper', 'lizard'],
+            'lizard': ['Spok', 'paper'],
+            'Spok': ['scissors', 'stone']
+        }
+
+
+        return 'Player' if bot_choice in rules.get(player_choice, []) else 'Bot'
 
     def count_score(self,winner):
         if winner == 'Player':
@@ -39,8 +38,14 @@ class Game:
 
     @staticmethod
     def player_input():
-        player_input = input(f'Игра началась! Сделай свой ход 1 = stone, 2 = scissors, 3 = paper, 4 = lizard, 5 = Spok: ')
-        return int(player_input)
+        while True:
+            try:
+                player_input = int(input(f'Игра началась! Сделай свой ход 1 = stone, 2 = scissors, 3 = paper, 4 = lizard, 5 = Spok: '))
+                if 1 <= player_input <= 5:
+                    return int(player_input)
+                print('Ошибка выбери число от 1 до 5.')
+            except ValueError:
+                print('Ошибка введи целое число.')
 
     def check_win(self):
         if self.score_player == self.round_to_win:
@@ -51,7 +56,15 @@ class Game:
             return None
 
     def number_of_rounds_input(self):
-        self.round_to_win = int(input(f'Введите количество раундов до победы: '))
+        while True:
+            try:
+                self.round_to_win = int(input(f'Введите количество раундов до победы: '))
+                if self.round_to_win > 0:
+                    break
+                print('Введите количество раундов до победы ')
+            except ValueError:
+                print('Ошибка введите число ')
+
 
     def game_started(self):
         self.number_of_rounds_input()
