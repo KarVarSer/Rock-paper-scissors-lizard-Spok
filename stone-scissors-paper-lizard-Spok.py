@@ -59,7 +59,7 @@ class Game:
         while True:
             try:
                 self.round_to_win = int(input(f'Введите количество раундов до победы: '))
-                if self.round_to_win > 0:
+                if 1 <= self.round_to_win <= 20:
                     break
                 print('Введите количество раундов до победы ')
             except ValueError:
